@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
 public class CardStack : MonoBehaviour
 {
@@ -82,10 +83,20 @@ public class CardStack : MonoBehaviour
         return temp;
     }
 
-    public void Push(Card card)
+
+    public void ServerAddCard(Card card)
     {
         cards.Add(card);
     }
+
+    //[ClientRpc]
+    //public void RpcAddCard(Card card)
+    //{
+    //    if (!isServer)
+    //    {
+    //        ServerAddCard(card);
+    //    }
+    //}
 
     public int CardValue()
     {

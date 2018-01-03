@@ -7,7 +7,10 @@ public class PlayerController : NetworkBehaviour {
 
     public int money = 1000;
     public int currentBet = 0;
-    public int seatPosition;
+
+    [SyncVar (hook ="OnChangeSeatPosition")]
+    public int seatPosition=-1;
+    public Vector3[] seatPositions = new[] { new Vector3(3.726f, -.43f, 0.468f), new Vector3(3.05f, -0.4312742f, 0.2f), new Vector3(2.4f, -0.4412742f, 0.6f) };
 
     public bool bettingOnCurrentHand = false;
 
@@ -31,18 +34,26 @@ public class PlayerController : NetworkBehaviour {
     }
 
     [Server]
-    public void Push(Card card)
+    public void ServerAddCard(Card card)
     {
-        cards.Push(card);
+        cards.ServerAddCard(card);
         RpcAddCard(card);
     }
 
+    [ClientRpc]
     void RpcAddCard(Card card)
     {
         if (!isServer)
         {
-            cards.Push(card);
+            cards.ServerAddCard(card);
         }
+    }
+
+
+    void OnChangeSeatPosition(int seat)
+    {
+        seatPosition = seat;
+        cards.GetComponent<CardStackView>().startPosition = seatPositions[seat];
     }
 
     #region Commands

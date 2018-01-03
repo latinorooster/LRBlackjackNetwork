@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿
 
-public class Card
+public struct Card
 {
     public int CardIndex;
     public int Value;

@@ -32,6 +32,7 @@ public class GameController : NetworkBehaviour {
 
     public void AddPlayer(PlayerController newPlayer)
     {
+        newPlayer.seatPosition = NumberOfPlayers();
         players.Add(newPlayer);
 
         if (players.Count == 1)
@@ -42,6 +43,15 @@ public class GameController : NetworkBehaviour {
         {
             //TODO: Display the cards of the current game
         }
+    }
+
+    int NumberOfPlayers()
+    {
+        if (players == null)
+        {
+            return 0;
+        }
+        return players.Count;
     }
 
     [Server]
@@ -148,10 +158,12 @@ public class GameController : NetworkBehaviour {
         {
             if (player.currentBet == 0)
                 continue;
-            Card c = deck.Pop();
-            player.Push(deck.Pop());
+            player.ServerAddCard(deck.Pop());
         }
-        dealer.Push(deck.Pop());
+
+        //Card nextCard = deck.Pop();
+        dealer.ServerAddCard(deck.Pop());
+        //dealer.RpcAddCard(nextCard);
 
         // deal second card
         foreach (var player in players)
@@ -159,7 +171,7 @@ public class GameController : NetworkBehaviour {
             if (player.currentBet == 0)
                 continue;
 
-            player.Push(deck.Pop());
+            player.ServerAddCard(deck.Pop());
         }
 
         // TODO: handle dealer blackjack

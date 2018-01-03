@@ -85,6 +85,7 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\Card.cs" />
     <Compile Include="Assets\Scripts\CardStack.cs" />
+    <Compile Include="Assets\Scripts\CardStackView.cs" />
     <Compile Include="Assets\Scripts\CardView.cs" />
     <Compile Include="Assets\Scripts\GameController.cs" />
     <Compile Include="Assets\Scripts\GameState.cs" />
