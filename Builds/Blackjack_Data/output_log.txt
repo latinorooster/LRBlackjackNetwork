@@ -1,0 +1,81 @@
+Initialize engine version: 5.6.1f1 (2860b30f0b54)
+GfxDevice: creating device client; threaded=1
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.0]
+    Renderer: Intel(R) HD Graphics 4000 (ID=0x166)
+    Vendor:   Intel
+    VRAM:     912 MB
+    Driver:   10.18.10.4358
+Begin MonoManager ReloadAssembly
+Platform assembly: C:\Projects\LRBlackjackNetwork\Builds\Blackjack_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading C:\Projects\LRBlackjackNetwork\Builds\Blackjack_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: C:\Projects\LRBlackjackNetwork\Builds\Blackjack_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading C:\Projects\LRBlackjackNetwork\Builds\Blackjack_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+Platform assembly: C:\Projects\LRBlackjackNetwork\Builds\Blackjack_Data\Managed\UnityEngine.UI.dll (this message is harmless)
+Loading C:\Projects\LRBlackjackNetwork\Builds\Blackjack_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
+Platform assembly: C:\Projects\LRBlackjackNetwork\Builds\Blackjack_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
+Loading C:\Projects\LRBlackjackNetwork\Builds\Blackjack_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
+Platform assembly: C:\Projects\LRBlackjackNetwork\Builds\Blackjack_Data\Managed\UnityEngine.Analytics.dll (this message is harmless)
+Loading C:\Projects\LRBlackjackNetwork\Builds\Blackjack_Data\Managed\UnityEngine.Analytics.dll into Unity Child Domain
+- Completed reload, in  0.111 seconds
+Platform assembly: C:\Projects\LRBlackjackNetwork\Builds\Blackjack_Data\Managed\System.Core.dll (this message is harmless)
+Platform assembly: C:\Projects\LRBlackjackNetwork\Builds\Blackjack_Data\Managed\System.dll (this message is harmless)
+desktop: 1920x1080 60Hz; virtual: 3840x1080 at 0,0
+<RI> Initializing input.
+XInput1_3.dll not found. Trying XInput9_1_0.dll instead...
+<RI> Input initialized.
+<RI> Initialized touch support.
+UnloadTime: 2.653038 ms
+[Client] function 'System.Void GameController::ClientHandleState(GameState/GameTurnState,System.String)' called on server
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Server next state:ServerState_StartDeck
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Server Enter state:ShufflingDeck
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Server next state:ServerState_WaitingForBets
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Client TurnState : ShufflingDeck - Shuffling
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Server Enter state:WaitingForBets
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Client TurnState : WaitingForBets - Waiting for bets
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+CmdPlaceBet
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Server next state:ServerState_DealingCards
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Server Enter state:DealingCards
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Server next state:ServerState_PlayHands
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Client TurnState : DealingCards - Dealing cards
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+reactor filed to acomplish request with code {1234}, bytesReceived {0}
+reactor filed to acomplish request with code {1234}, bytesReceived {0}
+Setting up 2 worker threads for Enlighten.
+  Thread -> id: 978 -> priority: 1 
+  Thread -> id: 3274 -> priority: 1 

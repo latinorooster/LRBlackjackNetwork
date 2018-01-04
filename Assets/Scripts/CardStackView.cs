@@ -9,7 +9,6 @@ public class CardStackView : NetworkBehaviour
 
     CardStack deck;
     Dictionary<int, CardView> fetchedCards;
-    [SyncVar]
     public Vector3 startPosition;
     public float offsetPosition;
     public GameObject cardPrefab;
@@ -90,4 +89,5 @@ public class CardStackView : NetworkBehaviour
         }
         fetchedCards.Clear();
     }
+
 }

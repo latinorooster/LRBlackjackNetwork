@@ -25,6 +25,7 @@ public class PlayerController : NetworkBehaviour {
 
     public override void OnStartClient()
     {
+        cards.GetComponent<CardStackView>().startPosition = seatPositions[seatPosition];
         base.OnStartClient();
     }
 
@@ -48,7 +49,6 @@ public class PlayerController : NetworkBehaviour {
             cards.ServerAddCard(card);
         }
     }
-
 
     void OnChangeSeatPosition(int seat)
     {
