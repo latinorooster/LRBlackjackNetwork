@@ -11,6 +11,8 @@ public class GameController : NetworkBehaviour {
     public CardStack deck;
     public CardStack dealer;
 
+    int minNumberOfCardsInDeck = 30;
+
     public List<PlayerController> players;
 
     public PlayerController currentPlayer;
@@ -128,7 +130,7 @@ public class GameController : NetworkBehaviour {
     [Client]
     public void ClientState_NewDeck()
     {
-        if (deck.CardCount < 40)
+        if (deck.CardCount < minNumberOfCardsInDeck)
         {
             deck.Reset();
             deck.CreateDeck(6);
@@ -153,6 +155,18 @@ public class GameController : NetworkBehaviour {
 
     }
 
+    [Client]
+    public void ClientState_PlayingDealerHand()
+    {
+
+    }
+
+    [Client]
+    void ClientState_Complete()
+    {
+
+    }
+
     #endregion
 
     #region Server State Functions
@@ -163,7 +177,7 @@ public class GameController : NetworkBehaviour {
         ServerEnterGameState(GameState.GameTurnState.ShufflingDeck, "Shuffling");
         deck.Reset();
         deck.CreateDeck(6);
-        //TODO: ServerClearHands();
+        ServerClearHands();
 
         ServerNextState("ServerState_WaitingForBets");
     }
@@ -183,8 +197,8 @@ public class GameController : NetworkBehaviour {
         // deal first card
         foreach (var player in players)
         {
-            if (player.currentBet == 0)
-                continue;
+            //if (player.currentBet == 0)
+            //    continue;
             player.ServerAddCard(deck.Pop());
         }
 
@@ -196,8 +210,8 @@ public class GameController : NetworkBehaviour {
         // deal second card
         foreach (var player in players)
         {
-            if (player.currentBet == 0)
-                continue;
+            //if (player.currentBet == 0)
+            //    continue;
 
             player.ServerAddCard(deck.Pop());
         }
@@ -213,8 +227,46 @@ public class GameController : NetworkBehaviour {
         ServerEnterGameState(GameState.GameTurnState.PlayingPlayerHand, "Playing hands");
 
         currentPlayerIndex = -1;
-        Debug.Log(currentPlayerIndex);
         ServerNextPlayer();
+    }
+
+    [Server]
+    void ServerState_PlayDealerHand()
+    {
+        ServerEnterGameState(GameState.GameTurnState.PlayingDealerHand, "Playing dealer hand");
+
+        bool notBust = false;
+
+        foreach (var player in players)
+        {
+            if (player.cards.cardScore <= 21)//(player.currentBet > 0 && player.cards.cardScore <= 21)
+            {
+                notBust = true;
+                break;
+            }
+        }
+
+        if (notBust)
+        {
+            Invoke("ServerPlayDealerCard", 1.0f);
+        }
+        else
+        {
+            ServerNextState("ServerState_Complete");
+        }
+    }
+
+    [Server]
+    void ServerState_Complete()
+    {
+        ServerEnterGameState(GameState.GameTurnState.Complete, "Complete hand");
+
+        foreach (var player in players)
+        {
+            //TODO: Payouts
+        }
+
+        ServerNextHand();
     }
 
     #endregion
@@ -232,13 +284,13 @@ public class GameController : NetworkBehaviour {
         int playerCount = 0;
         foreach (var player in players)
         {
-            if (!player.bettingOnCurrentHand)
-                return;
+            //if (!player.bettingOnCurrentHand)
+            //    return;
 
-            if (player.currentBet > 0)
-            {
+            //if (player.currentBet > 0)
+            //{
                 playerCount += 1;
-            }
+            //}
         }
 
         if (playerCount == 0)
@@ -258,15 +310,18 @@ public class GameController : NetworkBehaviour {
     {
         foreach (PlayerController p in players)
         {
-            //p.GetComponent<PlayerController>().Clear();
+            p.GetComponent<PlayerController>().ServerClearCards();
+            p.ServerClearBet();
         }
 
-        //dealer.GetComponent<CardStackView>().Clear();
-        //currentTurnPlayer = null;
+        dealer.GetComponent<CardStackView>().ServerClearCards();
+        dealer.GetComponent<CardStackView>().RpcClearCards();
+        currentPlayer = null;
+        currentPlayerIndex = -1;
     }
 
     [Server]
-    void ServerNextPlayer()
+    public void ServerNextPlayer()
     {
         if (currentPlayer != null)
         {
@@ -274,17 +329,16 @@ public class GameController : NetworkBehaviour {
         }
 
         currentPlayerIndex += 1;
-        Debug.Log(currentPlayerIndex);
         while (currentPlayerIndex < players.Count)
         {
             currentPlayer = players[currentPlayerIndex];
             if (currentPlayer != null)
             {
-                if (currentPlayer.currentBet != 0)
-                {
+                //if (currentPlayer.currentBet != 0)
+                //{
                     currentPlayer.RpcYourTurn(true);
                     break;
-                }
+                //}
             }
             currentPlayerIndex += 1;
         }
@@ -296,13 +350,59 @@ public class GameController : NetworkBehaviour {
         }
     }
 
+    [Server]
+    void ServerPlayDealerCard()
+    {
+        if (dealer.cardScore >= 17)
+        {
+            ServerNextState("ServerState_Complete");
+            return;
+        }
+
+        Card nextCard = deck.Pop();
+        Card temp = nextCard;
+        dealer.ServerAddCard(nextCard);
+        dealer.RpcAddCard(temp);
+
+        Invoke("ServerPlayDealerCard", 1.0f);
+
+    }
+
+    [Server]
+    public void ServerNextHand()
+    {
+        if (turnState != GameState.GameTurnState.Complete)
+        {
+            return;
+        }
+
+        if(deck.CardCount < minNumberOfCardsInDeck)
+        {
+            ServerNextState("ServerState_StartDeck");
+        }
+        else
+        {
+            ServerNextState("ServerState_WaitingForBets");
+        }
+    }
+
     #endregion
 
     #region Client UI Hooks
 
+    public void UIPlaceBet()
+    {
+        localPlayer.CmdPlaceBet();
+    }
+
     public void UiHit()
     {
         localPlayer.CmdHit();
+    }
+
+    public void UiStand()
+    {
+        localPlayer.CmdStand();
     }
 
     #endregion

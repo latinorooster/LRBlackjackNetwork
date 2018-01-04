@@ -1,9 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
 [RequireComponent(typeof(CardStack))]
-public class CardStackView : MonoBehaviour
+public class CardStackView : NetworkBehaviour
 {
 
     CardStack deck;
@@ -78,8 +79,25 @@ public class CardStackView : MonoBehaviour
 
     }
 
-    public void Clear()
+    public void ServerClearCards()
     {
+        deck.Reset();
+
+        foreach (CardView view in fetchedCards.Values)
+        {
+            Destroy(view.Card);
+        }
+        fetchedCards.Clear();
+    }
+
+    [ClientRpc]
+    public void RpcClearCards()
+    {
+        if (isServer)
+        {
+            return;
+        }
+
         deck.Reset();
 
         foreach (CardView view in fetchedCards.Values)

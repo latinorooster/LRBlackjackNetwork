@@ -10,6 +10,9 @@ public class CardStack : NetworkBehaviour
     public bool isDeck;
     public bool isDealer;
 
+    [SyncVar]
+    public int cardScore;
+
     void Awake()
     {
         cards = new List<Card>();
@@ -86,16 +89,20 @@ public class CardStack : NetworkBehaviour
     public void ServerAddCard(Card card)
     {
         cards.Add(card);
+        CalculateScore();
     }
 
     [ClientRpc]
     public void RpcAddCard(Card card)
     {
-        if(!isServer)
+        if (!isServer)
+        {
             cards.Add(card);
+            CalculateScore();
+        }
     }
 
-    public int CardValue()
+    public void CalculateScore()
     {
         int total = 0;
         int aces = 0;
@@ -126,12 +133,12 @@ public class CardStack : NetworkBehaviour
             total += aces;
         }
 
-        return total;
+        cardScore = total;
     }
 
     public bool IsBusted()
     {
-        return CardValue() > 21;
+        return cardScore > 21;
     }
 
     public void Reset()

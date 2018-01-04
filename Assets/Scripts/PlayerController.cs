@@ -6,17 +6,15 @@ using UnityEngine.Networking;
 public class PlayerController : NetworkBehaviour {
 
     public int money = 1000;
-    public int currentBet = 0;
+    //public int currentBet = 0;
 
     [SyncVar (hook ="OnChangeSeatPosition")]
     public int seatPosition=-1;
     public Vector3[] seatPositions = new[] { new Vector3(3.726f, -.43f, 0.468f), new Vector3(3.05f, -0.4312742f, 0.2f), new Vector3(2.4f, -0.4412742f, 0.6f) };
 
-    public bool bettingOnCurrentHand = false;
+    //public bool bettingOnCurrentHand = false;
 
     public CardStack cards;
-
-    public int cardScore;
 
     public override void OnStartServer()
     {
@@ -39,6 +37,11 @@ public class PlayerController : NetworkBehaviour {
     {
         cards.ServerAddCard(card);
         RpcAddCard(card);
+
+        if (cards.cardScore > 21)
+        {
+            GameController.singleton.ServerNextPlayer();
+        }
     }
 
     [ClientRpc]
@@ -50,11 +53,44 @@ public class PlayerController : NetworkBehaviour {
         }
     }
 
+    [Server]
+    public void ServerClearCards()
+    {
+        cards.GetComponent<CardStackView>().ServerClearCards();
+        cards.cardScore = 0;
+
+        RpcClearCards();
+    }
+
+    [ClientRpc]
+    private void RpcClearCards()
+    {
+        if (!isServer)
+        {
+            cards.GetComponent<CardStackView>().ServerClearCards();
+        }
+        cards.cardScore = 0;
+    }
+
+    [Server]
+    public void ServerClearBet()
+    {
+        //currentBet = 0;
+        RpcClearBet();
+    }
+
+    [ClientRpc]
+    private void RpcClearBet()
+    {
+        if (!isServer)
+        {
+            //currentBet = 0;
+        }
+    }
+
     [ClientRpc]
     public void RpcYourTurn(bool isYourTurn)
     {
-
-        Debug.Log(isLocalPlayer);
         if (isYourTurn && isLocalPlayer)
         {
             GameController.singleton.EnablePlayHandButtons();
@@ -83,9 +119,9 @@ public class PlayerController : NetworkBehaviour {
         }
 
         Debug.Log("CmdPlaceBet");
-        currentBet += 10;
+        //currentBet += 10;
         money -= 10;
-        bettingOnCurrentHand = true;
+        //bettingOnCurrentHand = true;
 
         GameController.singleton.ServerCheckAllBets();
     }
@@ -103,7 +139,7 @@ public class PlayerController : NetworkBehaviour {
             Debug.LogError("Not your turn");
             return;
         }
-        if (cardScore > 21)
+        if (cards.cardScore > 21)
         {
             Debug.LogError("Cannot hit over 21");
             return;
@@ -112,6 +148,25 @@ public class PlayerController : NetworkBehaviour {
         Debug.Log("CmdHit");
 
         ServerAddCard(GameController.singleton.deck.Pop());
+    }
+
+    [Command]
+    public void CmdStand()
+    {
+        if (GameController.singleton.turnState != GameState.GameTurnState.PlayingPlayerHand)
+        {
+            Debug.LogError("Cannot stand now");
+            return;
+        }
+        if (GameController.singleton.currentPlayer != this)
+        {
+            Debug.LogError("Not your turn");
+            return;
+        }
+
+        Debug.Log("CmdStand");
+
+        GameController.singleton.ServerNextPlayer();
     }
 
     #endregion
