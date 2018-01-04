@@ -1,10 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Networking;
 
 [RequireComponent(typeof(CardStack))]
-public class CardStackView : NetworkBehaviour
+public class CardStackView : MonoBehaviour
 {
 
     CardStack deck;

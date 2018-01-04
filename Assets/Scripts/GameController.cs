@@ -161,9 +161,10 @@ public class GameController : NetworkBehaviour {
             player.ServerAddCard(deck.Pop());
         }
 
-        //Card nextCard = deck.Pop();
-        dealer.ServerAddCard(deck.Pop());
-        //dealer.RpcAddCard(nextCard);
+        Card nextCard = deck.Pop();
+        Card temp = nextCard;
+        dealer.ServerAddCard(nextCard);
+        dealer.RpcAddCard(temp);
 
         // deal second card
         foreach (var player in players)

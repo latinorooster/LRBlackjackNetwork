@@ -17,7 +17,7 @@ Platform assembly: C:\Projects\LRBlackjackNetwork\Builds\Blackjack_Data\Managed\
 Loading C:\Projects\LRBlackjackNetwork\Builds\Blackjack_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
 Platform assembly: C:\Projects\LRBlackjackNetwork\Builds\Blackjack_Data\Managed\UnityEngine.Analytics.dll (this message is harmless)
 Loading C:\Projects\LRBlackjackNetwork\Builds\Blackjack_Data\Managed\UnityEngine.Analytics.dll into Unity Child Domain
-- Completed reload, in  0.111 seconds
+- Completed reload, in  0.055 seconds
 Platform assembly: C:\Projects\LRBlackjackNetwork\Builds\Blackjack_Data\Managed\System.Core.dll (this message is harmless)
 Platform assembly: C:\Projects\LRBlackjackNetwork\Builds\Blackjack_Data\Managed\System.dll (this message is harmless)
 desktop: 1920x1080 60Hz; virtual: 3840x1080 at 0,0
@@ -25,7 +25,7 @@ desktop: 1920x1080 60Hz; virtual: 3840x1080 at 0,0
 XInput1_3.dll not found. Trying XInput9_1_0.dll instead...
 <RI> Input initialized.
 <RI> Initialized touch support.
-UnloadTime: 2.653038 ms
+UnloadTime: 1.494322 ms
 [Client] function 'System.Void GameController::ClientHandleState(GameState/GameTurnState,System.String)' called on server
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
@@ -66,6 +66,26 @@ Server Enter state:DealingCards
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
+Server
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Server
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Server
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Server
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Server
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
 Server next state:ServerState_PlayHands
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
@@ -74,8 +94,18 @@ Client TurnState : DealingCards - Dealing cards
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
+Client
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
 reactor filed to acomplish request with code {1234}, bytesReceived {0}
 reactor filed to acomplish request with code {1234}, bytesReceived {0}
+reactor filed to acomplish request with code {1234}, bytesReceived {0}
+Log: connection {1} has been disconnected by timeout; address {::ffff:127.0.0.1:64810}
+ServerDisconnected due to error: Timeout
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
 Setting up 2 worker threads for Enlighten.
-  Thread -> id: 978 -> priority: 1 
-  Thread -> id: 3274 -> priority: 1 
+  Thread -> id: 2f44 -> priority: 1 
+  Thread -> id: 32c8 -> priority: 1 
