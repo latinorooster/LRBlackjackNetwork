@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.UI;
 
 public class GameController : NetworkBehaviour {
 
@@ -19,6 +20,9 @@ public class GameController : NetworkBehaviour {
 
     [SyncVar]
     public GameState.GameTurnState turnState;
+
+    public Button buttonHit;
+    public Button buttonStand;
 
     private void Awake()
     {
@@ -99,7 +103,24 @@ public class GameController : NetworkBehaviour {
                     ClientState_DealingCards();
                     break;
                 }
+            case GameState.GameTurnState.PlayingPlayerHand:
+                {
+                    ClientState_PlayingPlayerHand();
+                    break;
+                }
         }
+    }
+
+    public void EnablePlayHandButtons()
+    {
+        buttonHit.interactable = true;
+        buttonStand.interactable = true;
+    }
+
+    public void DisbalePlayHandButtons()
+    {
+        buttonHit.interactable = false;
+        buttonStand.interactable = false;
     }
 
     #region Client State Functions
@@ -122,6 +143,12 @@ public class GameController : NetworkBehaviour {
 
     [Client]
     public void ClientState_DealingCards()
+    {
+
+    }
+
+    [Client]
+    public void ClientState_PlayingPlayerHand()
     {
 
     }
@@ -181,15 +208,13 @@ public class GameController : NetworkBehaviour {
     }
 
     [Server]
-    void ServerClearHands()
+    void ServerState_PlayHands()
     {
-        foreach (PlayerController p in players)
-        {
-            //p.GetComponent<PlayerController>().Clear();
-        }
+        ServerEnterGameState(GameState.GameTurnState.PlayingPlayerHand, "Playing hands");
 
-        //dealer.GetComponent<CardStackView>().Clear();
-        //currentTurnPlayer = null;
+        currentPlayerIndex = -1;
+        Debug.Log(currentPlayerIndex);
+        ServerNextPlayer();
     }
 
     #endregion
@@ -226,6 +251,58 @@ public class GameController : NetworkBehaviour {
             // all players are ready/betting (some may be betting zero)
             ServerNextState("ServerState_DealingCards");
         }
+    }
+
+    [Server]
+    void ServerClearHands()
+    {
+        foreach (PlayerController p in players)
+        {
+            //p.GetComponent<PlayerController>().Clear();
+        }
+
+        //dealer.GetComponent<CardStackView>().Clear();
+        //currentTurnPlayer = null;
+    }
+
+    [Server]
+    void ServerNextPlayer()
+    {
+        if (currentPlayer != null)
+        {
+            currentPlayer.RpcYourTurn(false);
+        }
+
+        currentPlayerIndex += 1;
+        Debug.Log(currentPlayerIndex);
+        while (currentPlayerIndex < players.Count)
+        {
+            currentPlayer = players[currentPlayerIndex];
+            if (currentPlayer != null)
+            {
+                if (currentPlayer.currentBet != 0)
+                {
+                    currentPlayer.RpcYourTurn(true);
+                    break;
+                }
+            }
+            currentPlayerIndex += 1;
+        }
+
+        if (currentPlayerIndex >= players.Count)
+        {
+            currentPlayer.RpcYourTurn(false);
+            ServerNextState("ServerState_PlayDealerHand");
+        }
+    }
+
+    #endregion
+
+    #region Client UI Hooks
+
+    public void UiHit()
+    {
+        localPlayer.CmdHit();
     }
 
     #endregion

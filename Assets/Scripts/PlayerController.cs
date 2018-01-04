@@ -50,6 +50,21 @@ public class PlayerController : NetworkBehaviour {
         }
     }
 
+    [ClientRpc]
+    public void RpcYourTurn(bool isYourTurn)
+    {
+
+        Debug.Log(isLocalPlayer);
+        if (isYourTurn && isLocalPlayer)
+        {
+            GameController.singleton.EnablePlayHandButtons();
+        }
+        else
+        {
+            GameController.singleton.DisbalePlayHandButtons();
+        }
+    }
+
     void OnChangeSeatPosition(int seat)
     {
         seatPosition = seat;
@@ -73,6 +88,30 @@ public class PlayerController : NetworkBehaviour {
         bettingOnCurrentHand = true;
 
         GameController.singleton.ServerCheckAllBets();
+    }
+
+    [Command]
+    public void CmdHit()
+    {
+        if(GameController.singleton.turnState != GameState.GameTurnState.PlayingPlayerHand)
+        {
+            Debug.LogError("Cannot hit me now");
+            return;
+        }
+        if (GameController.singleton.currentPlayer != this)
+        {
+            Debug.LogError("Not your turn");
+            return;
+        }
+        if (cardScore > 21)
+        {
+            Debug.LogError("Cannot hit over 21");
+            return;
+        }
+
+        Debug.Log("CmdHit");
+
+        ServerAddCard(GameController.singleton.deck.Pop());
     }
 
     #endregion
